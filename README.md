@@ -63,6 +63,7 @@ All inputs are **optional**. If not set, sensible defaults will be used.
 | `team-reviewers` | A comma or newline-separated list of GitHub teams to request a review from. Note that a `repo` scoped [PAT](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) may be required. See [this issue](https://github.com/peter-evans/create-pull-request/issues/155). | |
 | `milestone` | The number of the milestone to associate this pull request with. | |
 | `draft` | Create a [draft pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests#draft-pull-requests). | `false` |
+| `create-commit` | Creates a commit with all uncommited workspace changes when creating the pull request. When set to `false` you are responsible for your own commits into the workspace before running this action. | `true` |
 
 For self-hosted runners behind a corporate proxy set the `https_proxy` environment variable.
 ```yml

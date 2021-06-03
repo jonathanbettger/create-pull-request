@@ -98,7 +98,7 @@ function splitLines(multilineString) {
         .map(s => s.trim())
         .filter(x => x !== '');
 }
-function createOrUpdateBranch(git, commitMessage, base, branch, branchRemoteName, signoff) {
+function createOrUpdateBranch(git, commitMessage, base, branch, branchRemoteName, signoff, createCommit) {
     return __awaiter(this, void 0, void 0, function* () {
         // Get the working base.
         // When a ref, it may or may not be the actual base.
@@ -121,7 +121,7 @@ function createOrUpdateBranch(git, commitMessage, base, branch, branchRemoteName
         const tempBranch = uuid_1.v4();
         yield git.checkout(tempBranch, 'HEAD');
         // Commit any uncommitted changes
-        if (yield git.isDirty(true)) {
+        if (createCommit && (yield git.isDirty(true))) {
             core.info('Uncommitted changes found. Adding a commit.');
             yield git.exec(['add', '-A']);
             const params = ['-m', commitMessage];
@@ -374,7 +374,7 @@ function createPullRequest(inputs) {
             core.endGroup();
             // Create or update the pull request branch
             core.startGroup('Create or update the pull request branch');
-            const result = yield create_or_update_branch_1.createOrUpdateBranch(git, inputs.commitMessage, inputs.base, inputs.branch, branchRemoteName, inputs.signoff);
+            const result = yield create_or_update_branch_1.createOrUpdateBranch(git, inputs.commitMessage, inputs.base, inputs.branch, branchRemoteName, inputs.signoff, inputs.createCommit);
             core.endGroup();
             if (['created', 'updated'].includes(result.action)) {
                 // The branch was created or updated
@@ -1086,7 +1086,8 @@ function run() {
                 reviewers: utils.getInputAsArray('reviewers'),
                 teamReviewers: utils.getInputAsArray('team-reviewers'),
                 milestone: Number(core.getInput('milestone')),
-                draft: core.getInput('draft') === 'true'
+                draft: core.getInput('draft') === 'true',
+                createCommit: core.getInput('create-commit') === 'true'
             };
             core.debug(`Inputs: ${util_1.inspect(inputs)}`);
             yield create_pull_request_1.createPullRequest(inputs);

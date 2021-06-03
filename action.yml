@@ -64,6 +64,9 @@ inputs:
   draft:
     description: 'Create a draft pull request'
     default: false
+  create-commit:
+    description: 'Creates a commit with all uncommited workspace changes when creating the pull request.'
+    default: true
 outputs:
   pull-request-number:
     description: 'The pull request number'
